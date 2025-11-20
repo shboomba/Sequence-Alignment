@@ -15,17 +15,17 @@ def process_memory():
     memory_consumed = int(memory_info.rss/1024) 
     return memory_consumed
 
-def time_wrapper(): 
-    start_time = time.time() 
-    cost, str1, str2 = basic()
-    end_time = time.time() 
-    time_taken = (end_time - start_time)*1000 
+def time_wrapper(input_file):
+    start_time = time.time()
+    cost, str1, str2 = basic(input_file)
+    end_time = time.time()
+    time_taken = (end_time - start_time)*1000
     process_memory_consumed = process_memory()
     return cost, str1, str2, time_taken, process_memory_consumed
 
-def basic():
+def basic(input_file):
     # Create two sequences based on the input file
-    seq1, seq2 = create_sequence()
+    seq1, seq2 = create_sequence(input_file)
 
     # gap deduction score
     s = 30
@@ -112,31 +112,46 @@ def create_aligned_strings(dp, arrow_arr, seq1, seq2):
             j -= 1
     return seq1_str, seq2_str
 
-def create_sequence():
-    # input file name
-    filename = 'SampleTestCases/input3.txt'
+def create_sequence(filename):
     with open(filename, 'r') as file:
         data = file.read().strip().splitlines()
-    
-    second_seq_start = 0
+
+    second_seq_start = -1
     sequence1 = data[0]
-    # make a while loop the next lines in data are integers, add a copy of sequence1 to index of the int in the current sequence1
-    for line in data[1:]:
-        if not line.isdigit():
-            second_seq_start = data.index(line)
-            break
-        index = int(line) + 1
+
+    # Generate first sequence
+    i = 1
+    while i < len(data) and data[i].isdigit():
+        index = int(data[i]) + 1
         sequence1 = sequence1[:index] + sequence1 + sequence1[index:]
-    sequence2 = data[second_seq_start]
-    for line in data[second_seq_start+1:]:
-        index = int(line) + 1
-        sequence2 = sequence2[:index] + sequence2 + sequence2[index:]
+        i += 1
+
+    # Find second base string
+    if i < len(data):
+        second_seq_start = i
+        sequence2 = data[second_seq_start]
+
+        # Generate second sequence
+        for line in data[second_seq_start+1:]:
+            index = int(line) + 1
+            sequence2 = sequence2[:index] + sequence2 + sequence2[index:]
+    else:
+        # No second sequence found
+        sequence2 = ""
+
     return sequence1, sequence2
 
 if __name__ == "__main__":
-    #create an output file and write the results to it
-    cost, str1, str2, time_taken, memory_consumed = time_wrapper()
-    with open('output.txt', 'w') as f:
+    if len(sys.argv) != 3:
+        print("Usage: python basic.py <input_file> <output_file>")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+
+    cost, str1, str2, time_taken, memory_consumed = time_wrapper(input_file)
+
+    with open(output_file, 'w') as f:
         f.write(f"{cost}\n")
         f.write(f"{str1}\n")
         f.write(f"{str2}\n")
