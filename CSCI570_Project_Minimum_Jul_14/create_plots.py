@@ -10,7 +10,10 @@ efficient_memory = []
 
 with open('Datapoints/results.csv', 'r') as f:
     reader = csv.DictReader(f)
-    for row in reader:
+    data = list(reader)
+    # Sort by problem size
+    data.sort(key=lambda x: int(x['Problem_Size']))
+    for row in data:
         problem_sizes.append(int(row['Problem_Size']))
         basic_times.append(float(row['Basic_Time_ms']))
         basic_memory.append(float(row['Basic_Memory_KB']))
@@ -89,4 +92,4 @@ print("   - Use Efficient Algorithm: Large inputs or memory-constrained systems"
 
 print("="*80)
 
-plt.show()
+# plt.show()

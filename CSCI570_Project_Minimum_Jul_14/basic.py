@@ -1,19 +1,24 @@
 from enum import Enum
-import sys 
-# from resource import * 
+import sys
 import time
-import psutil 
+
+# Use resource module on Linux, psutil on Windows
+try:
+    import resource
+    def process_memory():
+        return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+except ImportError:
+    import psutil
+    def process_memory():
+        process = psutil.Process()
+        memory_info = process.memory_info()
+        memory_consumed = int(memory_info.rss/1024)
+        return memory_consumed
 
 class Arrow(Enum):
     MATCH = 0
     SEQ1_GAP = 1
     SEQ2_GAP = 2
-
-def process_memory(): 
-    process = psutil.Process() 
-    memory_info = process.memory_info() 
-    memory_consumed = int(memory_info.rss/1024) 
-    return memory_consumed
 
 def time_wrapper(input_file):
     start_time = time.time()

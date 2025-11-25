@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python efficient.py:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
