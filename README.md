@@ -32,7 +32,8 @@
 ### Graph 1: CPU Time vs Problem Size
 ### Graph 2: Memory Usage vs Problem Size
 
-**[INSERT: Datapoints/performance_plots.png HERE]**
+<img width="1799" height="762" alt="image" src="https://github.com/user-attachments/assets/6ad4a25b-e4c0-4d7a-8f0a-599c6ce5ba01" />
+
 
 The graphs clearly demonstrate:
 - **Left Graph (CPU Time):** Both algorithms show quadratic time complexity O(n×m). The efficient algorithm has higher execution time due to recursive overhead from the divide-and-conquer approach.
